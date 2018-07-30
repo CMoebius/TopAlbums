@@ -12,6 +12,16 @@ class AlbumsTableViewController: UITableViewController {
 
 	let model = Model()
 
+	private func showAlert(_ message: String)
+	{
+		let ac = UIAlertController(title: "Top Albums", message: message, preferredStyle: .alert)
+
+		let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		ac.addAction(okAction)
+
+		self.present(ac, animated: true, completion: nil)
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,6 +34,15 @@ class AlbumsTableViewController: UITableViewController {
 //		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "AlbumCell")
 
 		model.getAlbums(completion: { (error) in
+
+			guard error == nil else
+			{
+				// We're in a background thread, update the UI on the main thread.
+				DispatchQueue.main.async {
+					self.showAlert(error!.localizedDescription)
+				}
+				return
+			}
 
 			if let rss = self.model.rss
 			{

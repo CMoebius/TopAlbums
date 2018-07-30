@@ -8,9 +8,16 @@
 
 import Foundation
 
-struct RSSFeedError: Error
+struct RSSFeedError: LocalizedError
 {
-	var message: String
+	var localizedDescription: String { return message }
+
+	private var message: String
+
+	init(message: String)
+	{
+		self.message = message
+	}
 }
 
 class Model
